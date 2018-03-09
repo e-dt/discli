@@ -1,16 +1,12 @@
-import logging
 import discord
-me = discord.Client()
-config = open(".config", "r")
-token = config.read()[:-1]
 
-@me.event
-async def on_ready():
+def pickchannel(me):
     guils = me.guilds
     print(number(guils))
     guild = guils[int(input("which? [0-n] numbering, choose by number"))]
-    print("\n".join([str(x) + " " + str(x.id) for x in guild.channels]))
-    await me.logout()
+    print(number(guild.channels))
+    channel = guild.channels[int(input("which? [0-n] numbering, choose by number"))]
+    return channel.id
 
 def number(lst):
     endstr = ""
@@ -18,8 +14,6 @@ def number(lst):
         endstr += str(num) + " " + str(i) + "\n"
     return endstr
 
-
-me.run(token, bot=False)
 
 
 
