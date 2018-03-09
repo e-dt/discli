@@ -18,7 +18,18 @@ async def on_ready():
     print("Ready to send messages to " + chan.name + "!")
     while 1:
         inp = input("> ")
-        if inp != "":
+        if inp == "":
+            pass
+        elif inp[0] == "/": # command
+            splinp = inp.split(" ")
+            if splinp[0] == "/sync":
+                try:
+                    chan.send("")
+                except:
+                    pass
+            else:
+                print("Invalid command!")
+        else:
             await chan.send(inp)
     
 me.run("MjY3NDMzODc3NzY3ODQ3OTQ2.DYCHqA.NwxsS_nRJCHCjSm39ubzhWD0RCs", bot=False)
