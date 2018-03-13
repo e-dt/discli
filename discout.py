@@ -1,20 +1,24 @@
 import discord
-from sys import argv
+import sys
+import os
 import discall
 
 me = discord.Client()    
 config = open(".config", "r")
 token = config.read()[:-1]
-
+chanfile = open(".channel", "w+")
 
 
 @me.event
 async def on_ready():
-    if len(argv) > 1:
-        channel = int(argv[1])
+    global chanfile
+    if len(sys.argv) == 2:
+        channel = int(sys.argv[1])
     else:
         channel = discall.pickchannel(me)
     chan = me.get_channel(channel)
+    print(channel)
+    chanfile.write(str(channel))
     print("Ready to send messages to " + chan.name + "!")
     while 1:
         inp = input("> ")
@@ -27,9 +31,21 @@ async def on_ready():
                     chan.send("")
                 except:
                     pass
+            elif splinp[0] == "/join":
+                try:
+                    channel = int(splinp[1])
+                except:
+                    channel = discall.pickchannel(me)
+                print(str(channel))
+                chan = me.get_channel(channel)
+                chanfile.write(str(channel))
+            elif splinp[0] == "/quit":
+                os.remove(".channel")
+                await me.logout()
+                exit()
             else:
                 print("Invalid command!")
         else:
             await chan.send(inp)
     
-me.run("MjY3NDMzODc3NzY3ODQ3OTQ2.DYCHqA.NwxsS_nRJCHCjSm39ubzhWD0RCs", bot=False)
+me.run(token, bot=False)
